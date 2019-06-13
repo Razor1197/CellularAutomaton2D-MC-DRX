@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cellular Automaton 2D", "CellularAutomaton2D\Cellular Automaton 2D.csproj", "{ED077CB1-33B2-42D7-9526-58D7D883CFFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cellular Automaton 2D", "WindowsFormsApplication5\Cellular Automaton 2D.csproj", "{ED077CB1-33B2-42D7-9526-58D7D883CFFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

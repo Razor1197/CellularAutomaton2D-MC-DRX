@@ -3925,6 +3925,7 @@ namespace WindowsFormsApplication5
                     if (randomPackage <= DeltaDislocationDensity && proability <= 0.2)
                     {
                         Map[Randx, Randy].IncrementDislocationDensity(randomPackage);
+                        DensityMap[Randx, Randy] += randomPackage;
                         DeltaDislocationDensity -= randomPackage;
                     }
                     if (DeltaDislocationDensity < 0.00001)
@@ -3935,7 +3936,7 @@ namespace WindowsFormsApplication5
 
             }
 
-            List<Cell> LatelyRecrystalized = new List<Cell>();
+
             for (int i = 0; i < Map_height; i++)
             {
                 for (int j = 0; j < Map_width; j++)
@@ -3947,7 +3948,6 @@ namespace WindowsFormsApplication5
                         Map[i, j].SetDislocationDensity(0);
                         DensityMap[i, j] = 0;
                         Map[i, j].SetRecrystalisationState(true);
-                        LatelyRecrystalized.Add(Map[i, j]);
                     }
                 }
             }
@@ -3958,16 +3958,19 @@ namespace WindowsFormsApplication5
             {
                 for (int j = 0; j < Map_width; j++)
                 {
-                    int tmp = CheckIfNeighbourIsRecrystalized(i, j, LatelyRecrystalized);
-
-                    if (tmp != 0 && previousIteration[i,j].GetRecrystalizationState() != true)
+                    if(previousIteration[i,j].GetRecrystalizationState()!=true)
                     {
-                        if (CheckIfNeighbourhoodDislocations(i, j))
+                        int tmp = CheckIfNeighbourIsRecrystalized(i, j);
+
+                        if (tmp != 0 && previousIteration[i, j].GetRecrystalizationState() != true)
                         {
-                            Map[i, j].SetState(tmp);
-                            Map[i, j].SetDislocationDensity(0);
-                            DensityMap[i, j] = 0;
-                            Map[i, j].SetRecrystalisationState(true);
+                            if (CheckIfNeighbourhoodDislocations(i, j))
+                            {
+                                Map[i, j].SetState(tmp);
+                                Map[i, j].SetDislocationDensity(0);
+                                DensityMap[i, j] = 0;
+                                Map[i, j].SetRecrystalisationState(true);
+                            }
                         }
                     }
                 }
@@ -3975,7 +3978,7 @@ namespace WindowsFormsApplication5
 
 
         }
-        int CheckIfNeighbourIsRecrystalized(int x, int y, List<Cell> LatelyRecrystalized)
+        int CheckIfNeighbourIsRecrystalized(int x, int y)
         {
             {
                 Cell[] neighbourhood;
@@ -3989,7 +3992,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Neumann(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell=>Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -3997,7 +4000,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Moore(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4005,7 +4008,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Pentagonal(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4013,7 +4016,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Hexagonal_left(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4021,7 +4024,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Hexagonal_right(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4029,7 +4032,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Periodical_Hexagonal_random(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4037,7 +4040,7 @@ namespace WindowsFormsApplication5
                             neighbourhoodRadius = Periodical_Radius(x, y);
                             for (int i = 0; i < neighbourhoodRadius.Count; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhoodRadius[i].GetID()))
+                                if (neighbourhoodRadius[i].GetRecrystalizationState() == true)
                                     return neighbourhoodRadius[i].GetState();
                             }
                             break;
@@ -4052,7 +4055,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Neumann(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4060,7 +4063,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Moore(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4068,7 +4071,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Pentagonal(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4076,7 +4079,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Hexagonal_left(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4084,7 +4087,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Hexagonal_right(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4092,7 +4095,7 @@ namespace WindowsFormsApplication5
                             neighbourhood = Absorbing_Hexagonal_random(x, y);
                             for (int i = 0; i < neighbourhood.Length; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhood[i].GetID()))
+                                if (neighbourhood[i].GetRecrystalizationState() == true)
                                     return neighbourhood[i].GetState();
                             }
                             break;
@@ -4100,7 +4103,7 @@ namespace WindowsFormsApplication5
                             neighbourhoodRadius = Absorbing_Radius(x, y);
                             for (int i = 0; i < neighbourhoodRadius.Count; i++)
                             {
-                                if (LatelyRecrystalized.Exists(Cell => Cell.GetID() == neighbourhoodRadius[i].GetID()))
+                                if (neighbourhoodRadius[i].GetRecrystalizationState() == true)
                                     return neighbourhoodRadius[i].GetState();
                             }
                             break;

@@ -12,23 +12,19 @@ namespace WindowsFormsApplication5
         int state;
         double DislocationDensity = 0;
         bool IsRecrystalised = false;
-        int ID;
         static Random rand = new Random();
-        static int id = 0;
 
             public Cell()
         {
             mass_x = rand.NextDouble();
             mass_y = rand.NextDouble();
             state = 0;
-            this.ID = id++;
         }
         public Cell(int state)
         {
             this.state = state;
             mass_x = rand.NextDouble();
             mass_y = rand.NextDouble();
-            this.ID = id++;
         }
         public Cell(Cell cell)
         {
@@ -37,7 +33,6 @@ namespace WindowsFormsApplication5
             this.mass_y = cell.mass_y;
             this.DislocationDensity = cell.DislocationDensity;
             this.IsRecrystalised = cell.IsRecrystalised;
-            this.ID = id++;
         }
 
         public void CloneCell(Cell cell)
@@ -47,11 +42,6 @@ namespace WindowsFormsApplication5
             this.mass_y = cell.mass_y;
             this.DislocationDensity = cell.DislocationDensity;
             this.IsRecrystalised = cell.IsRecrystalised;
-            this.ID = cell.ID;
-        }
-        public int GetID()
-        {
-            return this.ID;
         }
 
         public void SetState(int state)
